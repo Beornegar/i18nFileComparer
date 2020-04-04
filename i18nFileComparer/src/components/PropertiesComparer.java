@@ -15,9 +15,8 @@ public class PropertiesComparer implements PropertiesComparison {
 	public List<Pair<String, Properties>> getDifferencePropertiesFiles(Pair<Path, Properties> defaultFile,
 			Pair<Path, Properties> otherPair) {
 
-		
 		List<Pair<String, Properties>> erg = new ArrayList<Pair<String, Properties>>();
-		
+
 		Properties keysInDefaultFileButNotInOtherFile = new Properties();
 		Properties keysInOtherFileButNotInDefaultFile = new Properties();
 
@@ -58,14 +57,14 @@ public class PropertiesComparer implements PropertiesComparison {
 
 		RelatedPropertiesFiles saver = new RelatedPropertiesFiles();
 		saver.setParentPath(defaultFile.getX().getParent());
-		
-		if(withOriginFiles) {
+
+		if (withOriginFiles) {
 			saver.addPair(defaultFile);
 			saver.addAllPairs(others);
 		}
-		
+
 		for (Pair<Path, Properties> otherPair : others) {
-			saver.getFiles().addAll(getDifferencePropertiesFiles(defaultFile, otherPair));	
+			saver.getFiles().addAll(getDifferencePropertiesFiles(defaultFile, otherPair));
 		}
 
 		return saver;
@@ -73,54 +72,52 @@ public class PropertiesComparer implements PropertiesComparison {
 
 	@Override
 	public List<Pair<String, Properties>> getMissingEntries(RelatedPropertiesFiles propertyFiles) {
-		
+
 		Set<Object> allKeys = getAllKeysOfAllPropertyFiles(propertyFiles);
-		
+
 		List<Pair<String, Properties>> erg = new ArrayList<>();
-		
-		for(Pair<String, Properties> files : propertyFiles.getFiles()) {
-			
+
+		for (Pair<String, Properties> files : propertyFiles.getFiles()) {
+
 			Properties missingKeysPropertiesFile = getMissingKeysForPropertiesFile(allKeys, files.getY());
-			
-			if(missingKeysPropertiesFile != null) {
-				Pair<String, Properties> missingKeysFile = new Pair<>("Missing_Keys_in" +  files.getX() , missingKeysPropertiesFile);
+
+			if (missingKeysPropertiesFile != null) {
+				Pair<String, Properties> missingKeysFile = new Pair<>("Missing_Keys_in" + files.getX(),
+						missingKeysPropertiesFile);
 				erg.add(missingKeysFile);
 			}
 
 		}
-		
+
 		return erg;
 	}
-	
-	
-	@SuppressWarnings("unchecked")
+
 	private Set<Object> getAllKeysOfAllPropertyFiles(RelatedPropertiesFiles propertyFiles) {
-		
+
 		Set<Object> erg = new HashSet<>();
 
 		propertyFiles.getFiles().forEach(pair -> erg.addAll(pair.getY().keySet()));
-		
+
 		return erg;
 	}
-	
+
 	private Properties getMissingKeysForPropertiesFile(Set<Object> keys, Properties fileToCheck) {
-		
+
 		Properties missingKeysPropertiesFile = new Properties();
-		
+
 		Set<Object> firstSet = keys;
 		Set<Object> secondSet = fileToCheck.keySet();
-		
+
 		Set<Object> one = new HashSet<Object>(firstSet);
-		
+
 		one.removeAll(secondSet);
 		one.forEach(o -> missingKeysPropertiesFile.setProperty((String) o, ""));
 
 		if (!missingKeysPropertiesFile.isEmpty()) {
 			return missingKeysPropertiesFile;
 		}
-		
+
 		return null;
 	}
-	
 
 }
