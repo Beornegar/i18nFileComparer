@@ -8,7 +8,7 @@ public class PropertiesFileNameFilter implements FilenameFilter {
 	private final String ENDING = ".properties";
 	private final String I18N = "i18n";
 	private final String I18N_COMMOMBUNDLE = "commonbundle";
-	private final String MESSAGES = "commonbundle";
+	private final String MESSAGES = "messages";
 
 	@Override
 	public boolean accept(File file, String name) {
