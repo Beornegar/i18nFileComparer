@@ -82,7 +82,7 @@ public class PropertiesComparer implements PropertiesComparison {
 			Properties missingKeysPropertiesFile = getMissingKeysForPropertiesFile(allKeys, files.getY());
 
 			if (missingKeysPropertiesFile != null) {
-				Pair<String, Properties> missingKeysFile = new Pair<>("Missing_Keys_in" + files.getX(),
+				Pair<String, Properties> missingKeysFile = new Pair<>("Missing_Keys_in_" + files.getX(),
 						missingKeysPropertiesFile);
 				erg.add(missingKeysFile);
 			}
