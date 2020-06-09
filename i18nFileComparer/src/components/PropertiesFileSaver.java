@@ -37,6 +37,18 @@ public class PropertiesFileSaver implements FileSaving {
 					folderName += "_" + filesOfOneFolder.getParentPath().getParent().getParent().getFileName().toString();
 				}
 				
+				if(null != filesOfOneFolder.getParentPath().getParent().getParent().getParent()) {
+					folderName += "_" + filesOfOneFolder.getParentPath().getParent().getParent().getParent().getFileName().toString();
+				}
+				
+				if(null != filesOfOneFolder.getParentPath().getParent().getParent().getParent().getParent()) {
+					folderName += "_" + filesOfOneFolder.getParentPath().getParent().getParent().getParent().getParent().getFileName().toString();
+				}
+				
+				if(null != filesOfOneFolder.getParentPath().getParent().getParent().getParent().getParent().getParent()) {
+					folderName += "_" + filesOfOneFolder.getParentPath().getParent().getParent().getParent().getParent().getParent().getFileName().toString();
+				}
+				
 				String folder = savePath.toString() + File.separator + folderName;
 				
 				Files.createDirectories(Paths.get(folder));

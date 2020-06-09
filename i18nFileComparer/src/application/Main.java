@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -40,6 +41,8 @@ public class Main extends Application {
 			}
 			directoryChooser.setInitialDirectory(userDirectory);
 			
+			Label label = new Label("Finished");
+			label.setVisible(false);
 			//directoryChooser.setInitialDirectory(new File("src"));
 
 			Button button1 = new Button("Select Input-Directory");
@@ -64,7 +67,7 @@ public class Main extends Application {
 				} else {
 					button3.setDisable(true);
 				}
-				
+				label.setVisible(false);
 				System.out.println(selectedDirectory.getAbsolutePath());
 			});
 			
@@ -78,9 +81,11 @@ public class Main extends Application {
 				} else {
 					button3.setDisable(true);
 				}
-				
+				label.setVisible(false);
 				System.out.println(selectedDirectory.getAbsolutePath());
 			});
+			
+			
 			
 			button3.setOnAction(e -> {
 				
@@ -89,10 +94,10 @@ public class Main extends Application {
 				}
 				
 				handler.handle(inputPath, outPutPath, "i18n.properties");
-				
+				label.setVisible(true);
 			});
 
-			VBox vBox = new VBox(button1, button2, button3);
+			VBox vBox = new VBox(button1, button2, button3, label);
 			vBox.setPadding(new Insets(10,10,10,10));
 			vBox.setSpacing(10);
 			vBox.setAlignment(Pos.CENTER);
