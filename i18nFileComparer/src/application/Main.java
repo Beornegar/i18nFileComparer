@@ -32,7 +32,15 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			DirectoryChooser directoryChooser = new DirectoryChooser();
-			directoryChooser.setInitialDirectory(new File("src"));
+			
+			String userDirectoryString = System.getProperty("user.home");
+			File userDirectory = new File(userDirectoryString);
+			if(!userDirectory.canRead()) {
+			    userDirectory = new File("c:/");
+			}
+			directoryChooser.setInitialDirectory(userDirectory);
+			
+			//directoryChooser.setInitialDirectory(new File("src"));
 
 			Button button1 = new Button("Select Input-Directory");
 			button1.setPrefSize(150, 10);
