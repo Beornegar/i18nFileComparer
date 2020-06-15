@@ -3,6 +3,9 @@ package api;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -54,8 +57,10 @@ public class PropertiesFileHandler {
 				propFile.setParentPath(Paths.get(files.get(0)).getParent());
 				
 				for(String filePath : files) {
+					InputStream inputStream = new FileInputStream(filePath);
+					Reader reader = new InputStreamReader(inputStream, "UTF-8");
 					Properties prop = new Properties();
-					prop.load(new FileInputStream(filePath));
+					prop.load(reader);
 					propFile.getFiles().add(new Pair<>(Paths.get(filePath).getFileName().toString(), prop));
 				}
 

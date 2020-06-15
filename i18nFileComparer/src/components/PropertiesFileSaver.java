@@ -3,6 +3,7 @@ package components;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,8 +56,9 @@ public class PropertiesFileSaver implements FileSaving {
 				
 				for(Pair<String,Properties> files : filesOfOneFolder.getFiles()) {
 					
-					files.getY().store(new FileOutputStream(folder + File.separator + files.getX()), null);
-					
+					//files.getY().store(new FileOutputStream(folder + File.separator + files.getX(), "UTF-8"), null);
+					files.getY().store(new OutputStreamWriter(
+						    new FileOutputStream(folder + File.separator + files.getX()), "UTF-8"), null);
 				}
 				
 			}
