@@ -23,7 +23,7 @@ import components.file.save.PropertiesFileSaver;
 import components.file.search.FileStore;
 import utils.PropertiesWithPath;
 
-public class PropertiesFileHandler {
+public class PropertiesFileHandler implements FileHandler {
 
 	public static final FileStore STORE = new FileStore(new PropertiesFileNameFilter());
 	public static final PropertiesComparison COMPARER = new PropertiesComparer();
