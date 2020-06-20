@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -35,6 +36,14 @@ public class PropertiesComparer implements PropertiesComparison {
 
 		Set<Object> erg = new HashSet<>();
 		propertyFiles.forEach(file -> erg.addAll(file.getProperties().keySet()));
+		System.out.println("--File-Content--");
+		
+		propertyFiles.forEach(file -> {
+			for(Entry<Object, Object> entry : file.getProperties().entrySet()) {
+				System.out.println(entry.getKey().toString() + ":" + entry.getValue().toString() );
+			}
+		});
+		System.out.println();
 		return erg;
 	}
 

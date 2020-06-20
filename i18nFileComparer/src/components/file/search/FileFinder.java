@@ -6,6 +6,4 @@ public interface FileFinder {
 
 	public void visit(Path path);
 
-	public void visitRecursively(Path path);
-
 }
