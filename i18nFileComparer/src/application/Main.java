@@ -93,7 +93,7 @@ public class Main extends Application {
 					System.out.println("Choose Paths first!");
 				}
 				
-				handler.handle(inputPath, outPutPath, "i18n.properties");
+				handler.handle(inputPath, outPutPath);
 				label.setVisible(true);
 			});
 

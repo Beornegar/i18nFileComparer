@@ -1,5 +1,6 @@
 package api;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,10 +8,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import components.FileStore;
@@ -18,8 +23,7 @@ import components.PropertiesComparer;
 import components.PropertiesComparison;
 import components.PropertiesFileNameFilter;
 import components.PropertiesFileSaver;
-import utils.Pair;
-import utils.RelatedPropertiesFiles;
+import utils.PropertiesWithPath;
 
 public class PropertiesFileHandler {
 
@@ -30,69 +34,64 @@ public class PropertiesFileHandler {
 	public static final String DEFAULT_FILE_NAME = "i18n.properties";
 	public static final String DEFAULT_SAVE_PATH = "C:/";
 
-	public void handle(Path p, Path savePath, String defaultFileName) {
+	public void handle(Path p, Path savePath) {
 
-		// ------------- Finding of files ---------------
+		if(savePath == null || p == null) {
+			return;
+		}
 
+		findAllFiles(p, savePath);
+
+		Map<File, List<PropertiesWithPath>> mappedProperties = loadFileContent(STORE.getStorage());
+		
+		List<PropertiesWithPath> propFilesToSave = new ArrayList<>();
+		for(Entry<File, List<PropertiesWithPath>> entry : mappedProperties.entrySet()) {
+			propFilesToSave.addAll(COMPARER.getMissingEntries(entry.getValue()));
+		}
+
+		// ------------- Saving of files -----------------------
+
+		SAVER.saveFiles(savePath, propFilesToSave);
+	}
+
+	private void findAllFiles(Path p, Path savePath) {
 		System.out.println("Input-Path: " + p);
 		System.out.println("Output-Path: " + savePath);
 
-		STORE.visit(p);
-		STORE.getStore().forEach(f -> System.out.println(f));
+		try {
+			Files.walk(p).filter(Files::isDirectory).forEach(STORE::visit);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
-		// ------------- Processing of files ------------
+		STORE.getStorage().forEach((path, list) -> System.out
+				.println("Path [" + path.toString() + "]" + ", Elemente [" + list.toString() + "]"));
+	}
 
-		// load all property-files of same directory and save them together
-		List<RelatedPropertiesFiles> allPropertiesFiles = new ArrayList<RelatedPropertiesFiles>();
-		for (List<String> files : STORE.getStore()) {
+	private Map<File, List<PropertiesWithPath>> loadFileContent(Map<File,List<File>> propertyFiles) {
 
-			if(files.size() < 1) {
-				System.out.println("No files found in directory!");
-				return;
-			}
-			
-			try {
+		Map<File,List<PropertiesWithPath>> erg = new HashMap<>();
 				
-				RelatedPropertiesFiles propFile = new RelatedPropertiesFiles();
-				propFile.setParentPath(Paths.get(files.get(0)).getParent());
-				
-				for(String filePath : files) {
-					InputStream inputStream = new FileInputStream(filePath);
+		try {
+			for (File directory : propertyFiles.keySet()) {
+				List<PropertiesWithPath> properties = new ArrayList<>();
+				for(File file : propertyFiles.get(directory)) {
+					InputStream inputStream = new FileInputStream(file);
 					Reader reader = new InputStreamReader(inputStream, "UTF-8");
 					Properties prop = new Properties();
 					prop.load(reader);
-					propFile.getFiles().add(new Pair<>(Paths.get(filePath).getFileName().toString(), prop));
+					properties.add(new PropertiesWithPath(file, prop));				
 				}
-
-				allPropertiesFiles.add(propFile);
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				erg.put(directory, properties);
 			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		// Loop over those directories and work on each of them
-		for(RelatedPropertiesFiles files : allPropertiesFiles) {
-			
-			List<Pair<String, Properties>> propFilesToSave =  COMPARER.getMissingEntries(files);
-			files.getFiles().addAll(propFilesToSave);
-		}
+		return erg;
 		
-		
-		// ------------- Saving of files -----------------------
-
-		if (savePath == null) {
-			try {
-				savePath = Paths.get(PropertiesFileHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-
-		SAVER.saveFiles(savePath, allPropertiesFiles);
-
 	}
 
 }
