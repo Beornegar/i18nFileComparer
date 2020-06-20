@@ -3,7 +3,7 @@ package application;
 import java.io.File;
 import java.nio.file.Path;
 
-import api.PropertiesFileHandler;
+import components.PropertiesFileHandler;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
