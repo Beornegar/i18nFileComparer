@@ -1,10 +1,9 @@
-package components;
+package components.file.save;
 
 import java.nio.file.Path;
 import java.util.List;
 
 import utils.PropertiesWithPath;
-import utils.RelatedPropertiesFiles;
 
 public interface FileSaving {
 

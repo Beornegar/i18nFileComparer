@@ -1,4 +1,4 @@
-package components;
+package components.file.comparing;
 
 import java.io.File;
 import java.io.FilenameFilter;

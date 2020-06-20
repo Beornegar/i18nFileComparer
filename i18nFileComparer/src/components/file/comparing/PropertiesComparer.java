@@ -1,6 +1,5 @@
-package components;
+package components.file.comparing;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,9 +8,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-import utils.Pair;
 import utils.PropertiesWithPath;
-import utils.RelatedPropertiesFiles;
 
 public class PropertiesComparer implements PropertiesComparison {
 

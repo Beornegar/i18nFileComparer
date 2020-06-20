@@ -1,4 +1,4 @@
-package components;
+package components.file.search;
 
 import java.io.File;
 import java.io.FilenameFilter;

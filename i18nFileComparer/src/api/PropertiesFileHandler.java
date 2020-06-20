@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +16,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import components.FileStore;
-import components.PropertiesComparer;
-import components.PropertiesComparison;
-import components.PropertiesFileNameFilter;
-import components.PropertiesFileSaver;
+import components.file.comparing.PropertiesComparer;
+import components.file.comparing.PropertiesComparison;
+import components.file.comparing.PropertiesFileNameFilter;
+import components.file.save.PropertiesFileSaver;
+import components.file.search.FileStore;
 import utils.PropertiesWithPath;
 
 public class PropertiesFileHandler {
@@ -31,16 +29,16 @@ public class PropertiesFileHandler {
 	public static final PropertiesComparison COMPARER = new PropertiesComparer();
 	public static final PropertiesFileSaver SAVER = new PropertiesFileSaver();
 
-	public static final String DEFAULT_FILE_NAME = "i18n.properties";
-	public static final String DEFAULT_SAVE_PATH = "C:/";
+	public void handle(Path inputPath, Path outputPath) {
 
-	public void handle(Path p, Path savePath) {
-
-		if(savePath == null || p == null) {
+		System.out.println("Input-Path: " + inputPath);
+		System.out.println("Output-Path: " + outputPath);
+		
+		if(outputPath == null || inputPath == null) {
 			return;
 		}
 
-		findAllFiles(p, savePath);
+		findAllFiles(inputPath);
 
 		Map<File, List<PropertiesWithPath>> mappedProperties = loadFileContent(STORE.getStorage());
 		
@@ -51,21 +49,19 @@ public class PropertiesFileHandler {
 
 		// ------------- Saving of files -----------------------
 
-		SAVER.saveFiles(savePath, propFilesToSave);
+		SAVER.saveFiles(outputPath, propFilesToSave);
 	}
 
-	private void findAllFiles(Path p, Path savePath) {
-		System.out.println("Input-Path: " + p);
-		System.out.println("Output-Path: " + savePath);
-
+	private void findAllFiles(Path inputPath) {
+		
 		try {
-			Files.walk(p).filter(Files::isDirectory).forEach(STORE::visit);
+			Files.walk(inputPath).filter(Files::isDirectory).forEach(STORE::visit);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		STORE.getStorage().forEach((path, list) -> System.out
-				.println("Path [" + path.toString() + "]" + ", Elemente [" + list.toString() + "]"));
+		STORE.getStorage().forEach((path, list) -> 
+			System.out.println("Path [" + path.toString() + "]" + ", Elemente [" + list.toString() + "]"));
 	}
 
 	private Map<File, List<PropertiesWithPath>> loadFileContent(Map<File,List<File>> propertyFiles) {

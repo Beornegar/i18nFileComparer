@@ -1,4 +1,4 @@
-package components;
+package components.file.save;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,11 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
 
-import utils.Pair;
 import utils.PropertiesWithPath;
-import utils.RelatedPropertiesFiles;
 
 public class PropertiesFileSaver implements FileSaving {
 

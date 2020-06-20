@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	
 	private Path inputPath;
-	private Path outPutPath;
+	private Path outputPath;
 	private PropertiesFileHandler handler = new PropertiesFileHandler();
 	
 	
@@ -43,8 +43,7 @@ public class Main extends Application {
 			
 			Label label = new Label("Finished");
 			label.setVisible(false);
-			//directoryChooser.setInitialDirectory(new File("src"));
-
+			
 			Button button1 = new Button("Select Input-Directory");
 			button1.setPrefSize(150, 10);
 			
@@ -62,11 +61,12 @@ public class Main extends Application {
 
 				inputPath = selectedDirectory.toPath();
 				
-				if(outPutPath != null && inputPath != null) {
+				if(outputPath != null && inputPath != null) {
 					button3.setDisable(false);
 				} else {
 					button3.setDisable(true);
 				}
+				
 				label.setVisible(false);
 				System.out.println(selectedDirectory.getAbsolutePath());
 			});
@@ -74,13 +74,14 @@ public class Main extends Application {
 			button2.setOnAction(e -> {
 				File selectedDirectory = directoryChooser.showDialog(primaryStage);
 
-				outPutPath = selectedDirectory.toPath();
+				outputPath = selectedDirectory.toPath();
 				
-				if(outPutPath != null && inputPath != null) {
+				if(outputPath != null && inputPath != null) {
 					button3.setDisable(false);
 				} else {
 					button3.setDisable(true);
 				}
+				
 				label.setVisible(false);
 				System.out.println(selectedDirectory.getAbsolutePath());
 			});
@@ -88,12 +89,7 @@ public class Main extends Application {
 			
 			
 			button3.setOnAction(e -> {
-				
-				if(inputPath == null || outPutPath == null) {
-					System.out.println("Choose Paths first!");
-				}
-				
-				handler.handle(inputPath, outPutPath);
+				handler.handle(inputPath, outputPath);
 				label.setVisible(true);
 			});
 
