@@ -8,5 +8,5 @@ import utils.PropertiesWithPath;
 public interface FileSaving {
 
 	public void saveFiles(Path savePath, List<PropertiesWithPath> propFilesToSave);
-	
+
 }

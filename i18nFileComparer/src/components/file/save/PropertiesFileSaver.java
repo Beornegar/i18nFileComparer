@@ -18,8 +18,8 @@ public class PropertiesFileSaver implements FileSaving {
 
 		try {
 			Files.createDirectories(savePath);
-			
-			for(PropertiesWithPath file : propFilesToSave) {
+
+			for (PropertiesWithPath file : propFilesToSave) {
 				
 				String folder = savePath.toString() + File.separator;
 				

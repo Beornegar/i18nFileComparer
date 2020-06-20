@@ -16,12 +16,11 @@ public class PropertiesFileNameFilter implements FilenameFilter {
 		String lowercaseName = name.toLowerCase();
 		if (lowercaseName.startsWith(I18N) && lowercaseName.endsWith(ENDING)) {
 			return true;
-		} else if(lowercaseName.startsWith(I18N_COMMOMBUNDLE) && lowercaseName.endsWith(ENDING)) {
+		} else if (lowercaseName.startsWith(I18N_COMMOMBUNDLE) && lowercaseName.endsWith(ENDING)) {
 			return true;
-		} else if(lowercaseName.startsWith(MESSAGES) && lowercaseName.endsWith(ENDING)) {
+		} else if (lowercaseName.startsWith(MESSAGES) && lowercaseName.endsWith(ENDING)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}

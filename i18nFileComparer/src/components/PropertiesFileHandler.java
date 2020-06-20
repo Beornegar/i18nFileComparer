@@ -33,17 +33,17 @@ public class PropertiesFileHandler implements FileHandler {
 
 		System.out.println("Input-Path: " + inputPath);
 		System.out.println("Output-Path: " + outputPath);
-		
-		if(outputPath == null || inputPath == null) {
+
+		if (outputPath == null || inputPath == null) {
 			return;
 		}
 
 		findAllFiles(inputPath);
 
 		Map<File, List<PropertiesWithPath>> mappedProperties = loadFileContent(STORE.getStorage());
-		
+
 		List<PropertiesWithPath> propFilesToSave = new ArrayList<>();
-		for(Entry<File, List<PropertiesWithPath>> entry : mappedProperties.entrySet()) {
+		for (Entry<File, List<PropertiesWithPath>> entry : mappedProperties.entrySet()) {
 			propFilesToSave.addAll(COMPARER.getMissingEntries(entry.getValue()));
 		}
 
@@ -53,30 +53,30 @@ public class PropertiesFileHandler implements FileHandler {
 	}
 
 	private void findAllFiles(Path inputPath) {
-		
+
 		try {
 			Files.walk(inputPath).filter(Files::isDirectory).forEach(STORE::visit);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		STORE.getStorage().forEach((path, list) -> 
-			System.out.println("Path [" + path.toString() + "]" + ", Elemente [" + list.toString() + "]"));
+		STORE.getStorage().forEach((path, list) -> System.out
+				.println("Path [" + path.toString() + "]" + ", Elemente [" + list.toString() + "]"));
 	}
 
-	private Map<File, List<PropertiesWithPath>> loadFileContent(Map<File,List<File>> propertyFiles) {
+	private Map<File, List<PropertiesWithPath>> loadFileContent(Map<File, List<File>> propertyFiles) {
 
-		Map<File,List<PropertiesWithPath>> erg = new HashMap<>();
-				
+		Map<File, List<PropertiesWithPath>> erg = new HashMap<>();
+
 		try {
 			for (File directory : propertyFiles.keySet()) {
 				List<PropertiesWithPath> properties = new ArrayList<>();
-				for(File file : propertyFiles.get(directory)) {
+				for (File file : propertyFiles.get(directory)) {
 					InputStream inputStream = new FileInputStream(file);
 					Reader reader = new InputStreamReader(inputStream, "UTF-8");
 					Properties prop = new Properties();
 					prop.load(reader);
-					properties.add(new PropertiesWithPath(file, prop));				
+					properties.add(new PropertiesWithPath(file, prop));
 				}
 				erg.put(directory, properties);
 			}
@@ -87,7 +87,7 @@ public class PropertiesFileHandler implements FileHandler {
 		}
 
 		return erg;
-		
+
 	}
 
 }

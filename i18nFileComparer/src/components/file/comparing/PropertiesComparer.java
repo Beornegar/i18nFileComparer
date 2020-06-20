@@ -25,7 +25,7 @@ public class PropertiesComparer implements PropertiesComparison {
 				erg.add(missingKeysPropertiesFile.get());
 			}
 		}
-		
+
 		propertyFiles.stream().forEach(f -> erg.add(f));
 
 		return erg;

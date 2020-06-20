@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public class FileStore implements FileFinder {
 
 	private final Set<List<String>> store = new HashSet<>();
-	
-	//private final Map<Path, List<String>> storage = new HashMap<>();
+
+	// private final Map<Path, List<String>> storage = new HashMap<>();
 	private final Map<File, List<File>> storage = new HashMap<>();
-	
+
 	private final FilenameFilter filter;
 
 	public FileStore(FilenameFilter filter) {
@@ -34,15 +34,16 @@ public class FileStore implements FileFinder {
 		File f = path.toAbsolutePath().toFile();
 		List<String> filePaths = Arrays.asList(f.list(filter));
 		List<File> paths = new ArrayList<>();
-		
-		System.out.println("Visited Path ["+path+"]");
-		
-		//filePaths = filePaths.stream().map(s -> path.toAbsolutePath() + File.separator + s).collect(Collectors.toList());
-		
+
+		System.out.println("Visited Path [" + path + "]");
+
+		// filePaths = filePaths.stream().map(s -> path.toAbsolutePath() +
+		// File.separator + s).collect(Collectors.toList());
+
 		filePaths.stream().forEach(s -> System.out.println(s));
-		
-		paths = filePaths.stream().map(s -> Paths.get(path.toString(), s).toFile() ).collect(Collectors.toList());
-		
+
+		paths = filePaths.stream().map(s -> Paths.get(path.toString(), s).toFile()).collect(Collectors.toList());
+
 		if (filePaths.size() > 0) {
 			store.add(filePaths);
 			storage.put(path.toFile(), paths);
@@ -52,14 +53,10 @@ public class FileStore implements FileFinder {
 	@Override
 	public void visitRecursively(Path path) {
 		try {
-			
-			Files.walk(path)
-		     .filter(p -> p.toString().endsWith(".ext"))
-		     .map(p -> p.getParent().getParent())
-		     .distinct()
-		     .forEach(System.out::println);
-			
-			
+
+			Files.walk(path).filter(p -> p.toString().endsWith(".ext")).map(p -> p.getParent().getParent()).distinct()
+					.forEach(System.out::println);
+
 			File f = path.toAbsolutePath().toFile();
 			List<String> filePaths = Arrays.asList(f.list(filter));
 			if (filePaths.size() > 0) {
@@ -67,7 +64,7 @@ public class FileStore implements FileFinder {
 			} else {
 				Files.walk(path).filter(Files::isDirectory).forEach(this::visitRecursively);
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,8 +82,8 @@ public class FileStore implements FileFinder {
 		return filter;
 	}
 
-	public Map<File,List<File>> getStorage() {
+	public Map<File, List<File>> getStorage() {
 		return storage;
 	}
-	
+
 }
