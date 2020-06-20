@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.nio.file.Path;
 
+import components.FileHandler;
 import components.PropertiesFileHandler;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -19,7 +20,7 @@ public class Main extends Application {
 	
 	private Path inputPath;
 	private Path outputPath;
-	private PropertiesFileHandler handler = new PropertiesFileHandler();
+	private FileHandler handler = new PropertiesFileHandler();
 	
 	
 	@Override
